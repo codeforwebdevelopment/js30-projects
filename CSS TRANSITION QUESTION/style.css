@@ -1,0 +1,33 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+}
+
+/* Button Styles */
+.transition-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s ease, transform 0.3s ease;
+}
+
+/* Hover effect using transition */
+.transition-button:hover {
+    background-color: #0056b3;
+    /* Changes to a darker blue */
+    transform: scale(1.1);
+    /* Slightly scales the button */
+}
