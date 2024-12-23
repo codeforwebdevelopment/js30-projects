@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+Disable HTML href link using JS
+</title>
+
+</head>
+<body style="text-align:center;">
+<h1 style="color:red;">
+Hello World
+</h1>
+<a href="http://steadyadvice.net/" id="linkId">
+LINK
+</a>
+<br /><br />
+<button onclick="disableLink()">
+disable
+</button>
+<p id="linkStatus" style="color:green; font-size: 20px; font-weight: bold;"></p>
+</body>
+</html>
+
+App.html
+<a href="http://steadyadvice.net/" id='TheLink'>test</a>
+<input type='button' value="Disable" onclick="disableLink( 'TheLink', this );">
+
+<a id="openSite" href="http://steadyadvice.net/">open website</a>
+<button onclick=disablelink('openSite')>Disable link </button>
+you can replace #(hash) with javascript:void(0) event handler.

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+</head>
+<style>
+
+html {
+font-size: 62.5%;
+box-sizing: border-box;
+}
+
+*, *::before, *::after {
+margin: 0;
+padding: 0;
+box-sizing: inherit;
+}
+
+.calculator {
+border: 1px solid #ccc;
+border-radius: 5px;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+width: 400px;
+}
+
+.output-screen {
+width: 100%;
+font-size: 5rem;
+height: 80px;
+border: none;
+background-color: gray;
+color: #fff;
+text-align: right;
+padding-right: 20px;
+padding-left: 10px;
+}
+
+button {
+height: 60px;
+background-color: #fff;
+border-radius: 3px;
+border: 1px solid #c4c4c4;
+background-color: transparent;
+font-size: 2rem;
+color: #333;
+background-image: linear-gradient(to bottom,transparent,transparent 50%,rgba(0,0,0,.04));
+box-shadow: inset 0 0 0 1px rgba(255,255,255,.05), inset 0 1px 0 0 rgba(255,255,255,.45), inset 0 -1px 0 0 rgba(255,255,255,.15), 0 1px 0 0 rgba(255,255,255,.15);
+text-shadow: 0 1px rgba(255,255,255,.4);
+}
+
+button:hover {
+background-color: #eaeaea;
+}
+
+.operator {
+color: #337cac;
+}
+
+.clear-value {
+background-color: green;
+border-color: #b0353a;
+color: #fff;
+}
+
+.clear-value:hover {
+background-color: #f17377;
+}
+
+.calculate-value {
+background-color: blue;
+border-color: #337cac;
+color: #fff;
+height: 100%;
+grid-area: 2 / 4 / 6 / 5;
+}
+
+.calculate-value:hover {
+background-color: #4e9ed4;
+}
+
+.display-keys {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+grid-gap: 20px;
+padding: 20px;
+}
+</style>
+<body>
+<div class="calculator">
+<h1 style="text-align: center;">Simple Javascript calculator</h1>
+<input type="text" class="output-screen" value="" disabled />
+
+<div class="display-keys">
+
+<button class="operator" value="+">+</button>
+<button class="operator" value="-">-</button>
+<button class="operator" value="*">&times;</button>
+<button class="operator" value="/">&divide;</button>
+
+<button value="7">7</button>
+<button value="8">8</button>
+<button value="9">9</button>
+
+<button value="4">4</button>
+<button value="5">5</button>
+<button value="6">6</button>
+
+<button value="1">1</button>
+<button value="2">2</button>
+<button value="3">3</button>
+
+<button value="0">0</button>
+<button class="decimal" value=".">.</button>
+<button class="clear-value" value="clear-value">AC</button>
+
+<button class="calculate-value operator" value="=">=</button>
+
+</div>
+</div>
+</body>
+<script>
+
+const calculator = {
+outputValue: '0',
+firstValue: null,
+flagForSecondOperand: false,
+operator: null,
+};
+
+function inputDigit(digit) {
+const { outputValue, flagForSecondOperand } = calculator;
+
+if (flagForSecondOperand === true) {
+calculator.outputValue = digit;
+calculator.flagForSecondOperand = false;
+} else {
+calculator.outputValue = outputValue === '0' ? digit : outputValue + digit;
+}
+}
+
+function inputDecimal(dot) {
+if (calculator.flagForSecondOperand === true) return;
+
+// If the `outputValue` does not contain a decimal point
+if (!calculator.outputValue.includes(dot)) {
+// Append the decimal point
+calculator.outputValue += dot;
+}
+}
+
+function handleOperator(nextOperator) {
+const { firstValue, outputValue, operator } = calculator
+const inputValue = parseFloat(outputValue);
+
+if (operator && calculator.flagForSecondOperand) {
+calculator.operator = nextOperator;
+return;
+}
+
+if (firstValue == null) {
+calculator.firstValue = inputValue;
+} else if (operator) {
+const currentValue = firstValue || 0;
+const result = performCalculation[operator](currentValue, inputValue);
+
+calculator.outputValue = String(result);
+calculator.firstValue = result;
+}
+
+calculator.flagForSecondOperand = true;
+calculator.operator = nextOperator;
+}
+
+const performCalculation = {
+'/': (firstValue, secondOperand) => (firstValue / secondOperand).toFixed(5),
+
+'*': (firstValue, secondOperand) => firstValue * secondOperand,
+
+'+': (firstValue, secondOperand) => firstValue + secondOperand,
+
+'-': (firstValue, secondOperand) => firstValue - secondOperand,
+
+'=': (firstValue, secondOperand) => secondOperand
+};
+
+function resetCalculator() {
+calculator.outputValue = '0';
+calculator.firstValue = null;
+calculator.flagForSecondOperand = false;
+calculator.operator = null;
+}
+
+function updateDisplay() {
+const display = document.querySelector('.output-screen');
+display.value = calculator.outputValue;
+}
+
+updateDisplay();
+
+const keys = document.querySelector('.display-keys');
+keys.addEventListener('click', (event) => {
+const { target } = event;
+if (!target.matches('button')) {
+return;
+}
+
+if (target.classList.contains('operator')) {
+handleOperator(target.value);
+updateDisplay();
+return;
+}
+
+if (target.classList.contains('decimal')) {
+inputDecimal(target.value);
+updateDisplay();
+return;
+}
+
+if (target.classList.contains('clear-value')) {
+resetCalculator();
+updateDisplay();
+return;
+}
+
+inputDigit(target.value);
+updateDisplay();
+});
+
+</script>
+</html>
+
+Second way-
+we can also make a JS calculator using the eval function. This function is used to evaluate any string. This is a built-in function of JS.
+Here we used the table tag to make UI and for adding additional functions we use form HTML element. On each keypress, we put on click method to add that value to the output screen. And after this eval function evaluate all values when you click on any operator.
+Code:
+<form name="calculator">
+<table>
+<tr>
+<td colspan="4">
+<input type="text" name="display" id="display" disabled>
+
+</td>
+</tr>
+<tr>
+<td><input type="button" name="one" value="1" onclick="calculator.display.value += '1'"></td>
+<td><input type="button" name="two" value="2" onclick="calculator.display.value += '2'"></td>
+<td><input type="button" name="three" value="3" onclick="calculator.display.value += '3'"></td>
+<td><input type="button" class="operator" name="plus" value="+" onclick="calculator.display.value += '+'"></td>
+</tr>
+<tr>
+<td><input type="button" name="four" value="4" onclick="calculator.display.value += '4'"></td>
+<td><input type="button" name="five" value="5" onclick="calculator.display.value += '5'"></td>
+<td><input type="button" name="six" value="6" onclick="calculator.display.value += '6'"></td>
+<td><input type="button" class="operator" name="minus" value="-" onclick="calculator.display.value += '-'"></td>
+</tr>
+<tr>
+<td><input type="button" name="seven" value="7" onclick="calculator.display.value += '7'"></td>
+<td><input type="button" name="eight" value="8" onclick="calculator.display.value += '8'"></td>
+<td><input type="button" name="nine" value="9" onclick="calculator.display.value += '9'"></td>
+<td><input type="button" class="operator" name="times" value="x" onclick="calculator.display.value += '*'"></td>
+</tr>
+<tr>
+<td><input type="button" id="clear" name="clear" value="c" onclick="calculator.display.value = ''"></td>
+<td><input type="button" name="zero" value="0" onclick="calculator.display.value += '0'"></td>
+<td><input type="button" name="doit" value="=" onclick="calculator.display.value = eval(calculator.display.value)"></td>
+<td><input type="button" class="operator" name="div" value="/" onclick="calculator.display.value += '/'"></td>
+
+</tr>
+</table>
+</form>
